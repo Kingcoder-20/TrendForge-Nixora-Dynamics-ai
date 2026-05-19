@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}TrendForge AI — Viral content, on demand{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}" />{% endblock %}
+
+{% block content %}
+<header class="nav glass">
+  <a class="brand" href="{{ url_for('home') }}">
+    <span class="brand-dot"></span> TrendForge <em>AI</em>
+  </a>
+  <nav class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#preview">Dashboard</a>
+    <a href="#quotes">Why creators love it</a>
+  </nav>
+  <div class="nav-cta">
+    <span class="status-pill" id="health-pill"><span class="dot"></span> checking…</span>
+    {% if session.get('user_id') %}
+      <a class="ghost-btn" href="{{ url_for('chat_page') }}">Open app</a>
+    {% else %}
+      <a class="ghost-btn" href="{{ url_for('login_page') }}">Login</a>
+      <a class="primary-btn" href="{{ url_for('signup_page') }}">Get started</a>
+    {% endif %}
+    <button class="icon-btn" data-open-drawer aria-label="Settings">⚙</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Nexora Dynamics · TrendForge AI</span>
+    <h1 class="display">Ride the next viral wave <span class="grad">before it breaks.</span></h1>
+    <p class="lede" id="hero-greet">Welcome, creator. AI-powered ideas, hooks, and full scripts — tuned to what's trending right now.</p>
+    <div class="hero-cta">
+      {% if session.get('user_id') %}
+        <a class="primary-btn lg" href="{{ url_for('chat_page') }}">Open dashboard →</a>
+      {% else %}
+        <a class="primary-btn lg" href="{{ url_for('signup_page') }}">Start free →</a>
+        <a class="ghost-btn lg" href="{{ url_for('login_page') }}">I have an account</a>
+      {% endif %}
+    </div>
+    <div class="hero-quote glass" id="quote-banner">
+      <span class="q-mark">"</span><span id="quote-text">Creators worldwide are using TrendForge to publish faster.</span>
+    </div>
+  </div>
+  <div class="hero-orb"></div>
+</section>
+
+<section id="features" class="section">
+  <h2 class="section-title">Built for serious creators</h2>
+  <div class="feature-grid">
+    <article class="feature glass">
+      <div class="f-icon">⚡</div>
+      <h3>Instant viral ideas</h3>
+      <p>Type a vibe — get hooks, captions and angles tuned to TikTok, Reels and Shorts.</p>
+    </article>
+    <article class="feature glass">
+      <div class="f-icon">🎬</div>
+      <h3>Full scripts in seconds</h3>
+      <p>Switch to Main mode for detailed, fact-backed scripts ready to record.</p>
+    </article>
+    <article class="feature glass">
+      <div class="f-icon">📈</div>
+      <h3>Live trend radar</h3>
+      <p>See what niches, hooks and formats are popping right now in your region.</p>
+    </article>
+    <article class="feature glass">
+      <div class="f-icon">🧠</div>
+      <h3>Three smart modes</h3>
+      <p>Greeting, Normal and Main — TrendForge adapts depth to your intent.</p>
+    </article>
+  </div>
+</section>
+
+<section id="preview" class="section">
+  <h2 class="section-title">A viral creator dashboard</h2>
+  <div class="preview glass">
+    <div class="preview-side">
+      <div class="prev-row active">💬 Chat</div>
+      <div class="prev-row">💡 Ideas</div>
+      <div class="prev-row">🎞 Scripts</div>
+      <div class="prev-row">🔥 Trends</div>
+      <div class="prev-row">⚙ Settings</div>
+    </div>
+    <div class="preview-main">
+      <div class="prev-bubble ai">Here are 5 hooks for your fitness niche…</div>
+      <div class="prev-bubble user">give me TikTok hooks for fitness</div>
+      <div class="prev-bubble ai typing"><span></span><span></span><span></span></div>
+    </div>
+    <div class="preview-trends">
+      <div class="t-card">NPC livestreams 🔥</div>
+      <div class="t-card">Street interviews 🎤</div>
+      <div class="t-card">Glow-up edits ✨</div>
+    </div>
+  </div>
+</section>
+
+<section id="quotes" class="section quotes-section">
+  <h2 class="section-title">Loved by creators worldwide</h2>
+  <div class="quotes-grid">
+    <blockquote class="glass">"Consistency beats talent. TrendForge keeps me consistent." — Creator</blockquote>
+    <blockquote class="glass">"The riches are in the niches — and the niches are in TrendForge." — Creator</blockquote>
+    <blockquote class="glass">"Post like nobody's watching. They will be." — Creator</blockquote>
+  </div>
+</section>
+{% endblock %}
