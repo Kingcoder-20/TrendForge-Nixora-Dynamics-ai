@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Sign up · TrendForge AI{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}" />{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+  <a class="brand auth-brand" href="{{ url_for('home') }}"><span class="brand-dot"></span> TrendForge <em>AI</em></a>
+
+  <div class="auth-card glass">
+    <h1>Create your account</h1>
+    <p class="muted">Join creators using TrendForge worldwide.</p>
+
+    <form id="signup-form" novalidate>
+      <div class="field">
+        <input type="text" id="username" name="username" placeholder=" " autocomplete="nickname" required />
+        <label for="username">Username</label>
+      </div>
+      <div class="field">
+        <input type="email" id="email" name="email" placeholder=" " autocomplete="email" required />
+        <label for="email">Email</label>
+      </div>
+      <div class="field">
+        <input type="password" id="password" name="password" placeholder=" " autocomplete="new-password" required />
+        <label for="password">Password (min 8 chars)</label>
+        <button type="button" class="toggle-pw" data-toggle="password" aria-label="Show password">👁</button>
+      </div>
+      <div id="signup-error" class="form-error" hidden></div>
+      <button type="submit" class="primary-btn lg full">Create account</button>
+    </form>
+
+    <p class="auth-foot">Already have an account? <a href="{{ url_for('login_page') }}">Sign in</a></p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}<script src="{{ url_for('static', filename='auth.js') }}"></script>{% endblock %}

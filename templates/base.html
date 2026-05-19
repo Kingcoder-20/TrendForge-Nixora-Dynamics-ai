@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en" data-theme="midnight">
+<head>
+<!-- in base.html, inside <head> -->
+<link rel="manifest" href="/manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
+</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="TrendForge AI by Nexora Dynamics — viral content ideas, scripts and trends for creators." />
+  <meta name="username" content="{{ session.get('username', '') }}" />
+  <meta name="email" content="{{ session.get('email', '') }}" />
+  <title>{% block title %}TrendForge AI{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}" />
+  <link rel="manifest" href="/manifest.json">
+
+<!-- Meta tags for mobile styling -->
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<!-- Script to register the Service Worker safely -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        .then(reg => console.log('PWA active: ', reg.scope))
+        .catch(err => console.log('PWA registration failed: ', err));
+    });
+  }
+</script>
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <div id="app-root">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Toast container -->
+  <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+
+  <!-- Settings Drawer -->
+  <aside id="settings-drawer" class="drawer" aria-hidden="true">
+    <div class="drawer-backdrop" data-close-drawer></div>
+    <div class="drawer-panel glass">
+      <header class="drawer-head">
+        <h3>Settings</h3>
+        <button class="icon-btn" data-close-drawer aria-label="Close">✕</button>
+      </header>
+
+      <section class="drawer-section">
+        <h4>Profile</h4>
+        <div class="profile-card">
+          <div class="avatar" id="profile-avatar">U</div>
+          <div>
+            <div class="profile-name" id="profile-name">User</div>
+            <div class="profile-email" id="profile-email">—</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="drawer-section">
+        <h4>Theme</h4>
+        <div class="theme-grid">
+          <button class="theme-chip" data-theme="midnight"><span style="background:linear-gradient(135deg,#0b1020,#3b82f6)"></span>Midnight</button>
+          <button class="theme-chip" data-theme="aurora"><span style="background:linear-gradient(135deg,#0d1b2a,#73ffb8)"></span>Aurora</button>
+          <button class="theme-chip" data-theme="sunset"><span style="background:linear-gradient(135deg,#ff6b35,#e84393)"></span>Sunset</button>
+          <button class="theme-chip" data-theme="forest"><span style="background:linear-gradient(135deg,#1a3c2a,#a0c49d)"></span>Forest</button>
+          <button class="theme-chip" data-theme="paper"><span style="background:linear-gradient(135deg,#f5f3ee,#0d0d0d)"></span>Paper</button>
+        </div>
+      </section>
+
+      <section class="drawer-section">
+        <h4>Actions</h4>
+        <div class="drawer-actions">
+          <button class="ghost-btn" id="open-share">Share TrendForge</button>
+          <button class="ghost-btn" id="open-rating">Rate the app</button>
+          <button class="ghost-btn" id="clear-history">Delete chat history</button>
+          {% if session.get('user_id') %}
+          <a class="ghost-btn danger" href="{{ url_for('logout') }}">Logout</a>
+          {% else %}
+          <a class="ghost-btn" href="{{ url_for('login_page') }}">Login</a>
+          {% endif %}
+        </div>
+      </section>
+
+      <section class="drawer-section">
+        <h4>About</h4>
+        <p class="muted small">TrendForge AI helps creators ride viral waves. Powered by Nexora Dynamics (ND).</p>
+      </section>
+    </div>
+  </aside>
+
+  <!-- Share Modal -->
+  <div id="share-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-card glass">
+      <header class="modal-head">
+        <h3>Share TrendForge AI</h3>
+        <button class="icon-btn" data-close-modal aria-label="Close">✕</button>
+      </header>
+      <p class="muted">Help another creator discover TrendForge — it would mean a lot. Sharing is totally optional.</p>
+      <textarea id="share-caption" rows="3" class="input"></textarea>
+      <div class="share-grid">
+        <button data-share="copy">Copy link</button>
+        <button data-share="tiktok">TikTok</button>
+        <button data-share="instagram">Instagram</button>
+        <button data-share="facebook">Facebook</button>
+        <button data-share="x">X / Twitter</button>
+        <button data-share="whatsapp">WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rating Modal -->
+  <div id="rating-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-card glass">
+      <header class="modal-head">
+        <h3>Enjoying TrendForge?</h3>
+        <button class="icon-btn" data-close-modal aria-label="Close">✕</button>
+      </header>
+      <p class="muted">If you have a moment, a kind rating helps us grow. It's optional — no pressure.</p>
+      <div class="stars" id="rating-stars">
+        <button data-star="1">★</button><button data-star="2">★</button><button data-star="3">★</button><button data-star="4">★</button><button data-star="5">★</button>
+      </div>
+      <div class="modal-actions">
+        <button class="ghost-btn" data-close-modal>Maybe later</button>
+        <button class="primary-btn" id="submit-rating">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hourly Polite Share Prompt -->
+  <div id="hourly-share" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-card glass small">
+      <header class="modal-head">
+        <h3>A small favour 💛</h3>
+        <button class="icon-btn" data-close-modal aria-label="Close">✕</button>
+      </header>
+      <p>If TrendForge has helped you today, would you kindly share it with another creator? Only if you'd like to — totally optional.</p>
+      <div class="modal-actions">
+        <button class="ghost-btn" data-close-modal>Not now</button>
+        <button class="primary-btn" id="hourly-share-open">Share</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <span>Powered by <strong>Nexora Dynamics (ND)</strong> — Version 6.2 coming soon</span>
+      <span class="muted" id="footer-date"></span>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='api.js') }}"></script>
+  <script src="{{ url_for('static', filename='ui.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

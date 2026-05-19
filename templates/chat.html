@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · TrendForge AI{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}" />{% endblock %}
+
+{% block content %}
+<div class="app-shell">
+  <!-- Left sidebar -->
+  <aside class="side glass" id="side">
+    <a class="brand" href="{{ url_for('home') }}"><span class="brand-dot"></span> TrendForge</a>
+
+    <nav class="side-nav">
+      <button class="side-link active" data-view="chat">💬 Chat</button>
+      <button class="side-link" data-view="ideas">💡 Ideas</button>
+      <button class="side-link" data-view="scripts">🎞 Scripts</button>
+      <button class="side-link" data-view="trends">🔥 Trends</button>
+      <button class="side-link" data-open-drawer>⚙ Settings</button>
+      <a class="side-link danger" href="{{ url_for('logout') }}">↩ Logout</a>
+    </nav>
+
+    <div class="side-quote">
+      <p id="side-quote">"Show up daily. The algorithm rewards rhythm."</p>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <header class="topbar glass">
+      <button class="icon-btn only-mobile" id="toggle-side" aria-label="Menu">☰</button>
+      <div>
+        <div class="hello" id="hello-line">Hello there 👋</div>
+        <div class="muted small" id="hello-sub">Pick a mode and let's create.</div>
+      </div>
+      <div class="topbar-right">
+        <div class="mode-switch" role="tablist" aria-label="Reply mode">
+          <button data-mode="greeting" title="Quick greetings and small talk">Greeting</button>
+          <button data-mode="normal" class="active" title="Ideas, captions, summaries">Normal</button>
+          <button data-mode="main" title="Full scripts, deep research">Main</button>
+        </div>
+        <span class="status-pill" id="health-pill"><span class="dot"></span> checking…</span>
+        <button class="icon-btn" data-open-drawer aria-label="Settings">⚙</button>
+      </div>
+    </header>
+
+    <section class="chat-area">
+      <div class="chat-stream" id="chat-stream">
+        <div class="empty-state" id="empty-state">
+          <div class="orb"></div>
+          <h2 id="empty-greet">Hello, creator</h2>
+          <p class="muted">Try one of these to get going:</p>
+          <div class="chips">
+            <button class="chip" data-prefill="Give me 5 viral TikTok hooks for fitness creators">5 viral fitness hooks</button>
+            <button class="chip" data-prefill="Write a full 60-second YouTube Shorts script about morning routines">Shorts script · morning routines</button>
+            <button class="chip" data-prefill="Trending hashtags for Nigerian street comedy this week">Naija comedy hashtags</button>
+            <button class="chip" data-prefill="Summarize the top Instagram Reels trends">Summarize Reels trends</button>
+          </div>
+        </div>
+      </div>
+
+      <form class="composer glass" id="chat-form" autocomplete="off">
+        <button type="button" class="icon-btn" id="voice-btn" title="Voice input" aria-label="Voice">🎙</button>
+        <textarea id="chat-input" rows="1" placeholder="Ask TrendForge anything…"></textarea>
+        <button type="submit" class="primary-btn" id="send-btn">Send</button>
+      </form>
+    </section>
+
+    <!-- Comments wall -->
+    <section class="comments glass">
+      <header class="comments-head">
+        <h3>Creator Wall</h3>
+        <span class="muted small">What other creators are saying</span>
+      </header>
+      <form id="comment-form" class="comment-form">
+        <input type="text" id="comment-input" maxlength="500" placeholder="Share something with other creators…" />
+        <button class="primary-btn" type="submit">Post</button>
+      </form>
+      <ul id="comment-list" class="comment-list"></ul>
+    </section>
+  </main>
+
+  <!-- Trends sidebar -->
+  <aside class="trends glass">
+    <header class="trends-head">
+      <h3>🔥 Live Trends</h3>
+      <button class="ghost-btn xs" id="refresh-trends">Refresh</button>
+    </header>
+    <div class="trend-cards" id="trend-cards"></div>
+  </aside>
+</div>
+{% endblock %}
+
+{% block scripts %}<script src="{{ url_for('static', filename='chat.js') }}"></script>{% endblock %}
