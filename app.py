@@ -751,15 +751,16 @@ def chat_page():
     return render_template("chat.html")
 
 @app.route('/manifest.json')
-def serve_manifest():
-    return send_from_directory('static', 'manifest.json')
+def manifest():
+    return send_from_directory('.', 'manifest.json')
 
 @app.route('/sw.js')
-def serve_service_worker():
-    response = send_from_directory('static', 'sw.js')
-    # This header ensures the worker can manage your entire website safely
-    response.headers['Service-Worker-Allowed'] = '/'
-    return response
+def service_worker():
+    return send_from_directory('.', 'sw.js')
+
+@app.route('/icons/<path:filename>')
+def icons(filename):
+    return send_from_directory('icons', filename)
 
 # =========================
 # SIGNUP API
